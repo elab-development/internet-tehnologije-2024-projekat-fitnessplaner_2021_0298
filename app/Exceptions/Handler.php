@@ -36,4 +36,16 @@ class Handler extends ExceptionHandler
             // Možeš logiku za logovanje grešaka dodati ovde ako želiš
         });
     }
+
+    public function render($request, Throwable $exception)
+{
+    if ($request->expectsJson()) {
+        return response()->json([
+            'message' => $exception->getMessage(),
+        ], method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
+    }
+
+    return parent::render($request, $exception);
+}
+
 }
