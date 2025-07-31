@@ -18,6 +18,7 @@ return new class extends Migration
         $table->text('description')->nullable();
         $table->dateTime('workout_date');
         $table->timestamps();
+        
     });
 }
 
@@ -28,5 +29,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('workouts');
+    
+
     }
 };

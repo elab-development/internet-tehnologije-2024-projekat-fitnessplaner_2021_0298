@@ -18,10 +18,13 @@ class HydrationEntryController extends Controller
     {
         $validated = $request->validate([
             'amount_ml' => 'required|integer',
-            'time' => 'required|date',
+            'entry_date' => 'required|date',
         ]);
 
         $validated['user_id'] = Auth::id();
+        //$entry = HydrationEntry::create($validated);
+        //return response()->json($entry, 201);
+        
 
         return HydrationEntry::create($validated);
     }
@@ -35,7 +38,7 @@ class HydrationEntryController extends Controller
     {
         $hydrationEntry = HydrationEntry::where('user_id', Auth::id())->findOrFail($id);
 
-        $hydrationEntry->update($request->only(['amount_ml', 'time']));
+        $hydrationEntry->update($request->only(['amount_ml', 'entry_date']));
 
         return $hydrationEntry;
     }

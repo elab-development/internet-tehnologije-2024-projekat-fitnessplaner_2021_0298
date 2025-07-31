@@ -17,11 +17,9 @@ class NutritionEntryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'meal' => 'required|string|max:255',
-            'calories' => 'required|integer',
-            'protein' => 'required|numeric',
-            'carbs' => 'required|numeric',
-            'fat' => 'required|numeric',
+             'meal_type' => 'required|string|max:255',
+        'calories' => 'required|integer',
+        'entry_date' => 'required|date',
         ]);
 
         $validated['user_id'] = Auth::id();
@@ -38,7 +36,7 @@ class NutritionEntryController extends Controller
     {
         $nutritionEntry = NutritionEntry::where('user_id', Auth::id())->findOrFail($id);
 
-        $nutritionEntry->update($request->only(['meal', 'calories', 'protein', 'carbs', 'fat']));
+        $nutritionEntry->update($request->only(['meal_type', 'calories', 'entry_date']));
 
         return $nutritionEntry;
     }

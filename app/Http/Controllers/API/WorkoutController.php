@@ -18,7 +18,10 @@ class WorkoutController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'duration_minutes' => 'required|integer',
+            'duration' => 'required|integer',
+            'workout_date' => 'required|date',
+            'day' => 'required|string|max:20',
+            'coach_id' => 'nullable|integer',
         ]);
         $validated['user_id'] = Auth::id();
         return Workout::create($validated);
@@ -32,7 +35,7 @@ class WorkoutController extends Controller
     public function update(Request $request, $id)
     {
         $workout = Workout::where('user_id', Auth::id())->findOrFail($id);
-        $workout->update($request->only(['title', 'duration_minutes']));
+        $workout->update($request->only(['title', 'duration']));
         return $workout;
     }
 
@@ -42,4 +45,20 @@ class WorkoutController extends Controller
         $workout->delete();
         return response()->json(['message' => 'Deleted']);
     }
+
+    public function getByDay($day)
+{
+    // Validacija dana u nedelji (opcionalno)
+    $validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    if (!in_array($day, $validDays)) {
+        return response()->json(['error' => 'Invalid day'], 400);
+    }
+
+    // Vraćanje vežbi za korisnika i konkretan dan
+    $workouts = Workout::where('user_id', Auth::id())
+        ->where('day', $day)
+        ->get();
+
+    return response()->json($workouts);
+}
 }

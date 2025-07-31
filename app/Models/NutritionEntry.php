@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class NutritionEntry extends Model
 {
+    protected $fillable = ['meal_type', 'calories', 'entry_date', 'user_id'];
     public function user()
 {
     return $this->belongsTo(User::class);
