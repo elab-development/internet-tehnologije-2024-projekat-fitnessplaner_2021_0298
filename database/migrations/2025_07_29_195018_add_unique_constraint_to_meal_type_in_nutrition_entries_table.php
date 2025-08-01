@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
 {
     Schema::table('nutrition_entries', function (Blueprint $table) {
-        $table->unique('meal_type');
+        //$table->unique('meal_type');
     });
 }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down()
 {
     Schema::table('nutrition_entries', function (Blueprint $table) {
-        $table->dropUnique(['meal_type']);
+        //$table->dropUnique(['meal_type']);
     });
 }
 

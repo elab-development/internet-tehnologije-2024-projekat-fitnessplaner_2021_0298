@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Resources\WorkoutResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Workout;
@@ -11,7 +12,9 @@ class WorkoutController extends Controller
 {
     public function index()
     {
-        return Workout::where('user_id', Auth::id())->get();
+        //return Workout::where('user_id', Auth::id())->get();
+        $workouts = Workout::where('user_id', Auth::id())->get();
+        return WorkoutResource::collection($workouts);
     }
 
     public function store(Request $request)
@@ -24,19 +27,36 @@ class WorkoutController extends Controller
             'coach_id' => 'nullable|integer',
         ]);
         $validated['user_id'] = Auth::id();
-        return Workout::create($validated);
+        //return Workout::create($validated);
+        $workout = Workout::create($validated);
+        return new WorkoutResource($workout);
     }
 
     public function show($id)
     {
-        return Workout::where('user_id', Auth::id())->findOrFail($id);
+        //return Workout::where('user_id', Auth::id())->findOrFail($id);
+        $workout = Workout::where('user_id', Auth::id())->findOrFail($id);
+        return new WorkoutResource($workout);
     }
 
     public function update(Request $request, $id)
     {
+        //$workout = Workout::where('user_id', Auth::id())->findOrFail($id);
+        //$workout->update($request->only(['title', 'duration']));
+        //return $workout;
         $workout = Workout::where('user_id', Auth::id())->findOrFail($id);
-        $workout->update($request->only(['title', 'duration']));
-        return $workout;
+
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'duration' => 'sometimes|integer',
+            'workout_date' => 'sometimes|date',
+            'day' => 'sometimes|string|max:20',
+            'coach_id' => 'nullable|integer',
+        ]);
+
+        $workout->update($validated);
+
+        return new WorkoutResource($workout);
     }
 
     public function destroy($id)
@@ -59,6 +79,7 @@ class WorkoutController extends Controller
         ->where('day', $day)
         ->get();
 
-    return response()->json($workouts);
+    //return response()->json($workouts);
+    return WorkoutResource::collection($workouts);
 }
 }
