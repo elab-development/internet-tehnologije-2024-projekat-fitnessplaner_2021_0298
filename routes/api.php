@@ -8,6 +8,8 @@ use App\Http\Controllers\API\NutritionEntryController;
 use App\Http\Controllers\API\HydrationEntryController;
 use App\Http\Controllers\API\AuthController;
 
+use Illuminate\Support\Carbon;
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -39,12 +41,32 @@ Route::get('/hydration-entries/total-ml', function () {
 
 Route::get('/workouts/by-day/{day}', [WorkoutController::class, 'getByDay']);
 
-Route::get('/nutrition-hydration-summary', function () {
+//Route::get('/nutrition-hydration-summary', function () {
+   // $userId = auth()->id();
+
+   // return response()->json([
+  //      'nutrition' => \App\Models\NutritionEntry::where('user_id', $userId)->select('meal_type', 'calories')->get(),
+   //     'hydration' => \App\Models\HydrationEntry::where('user_id', $userId)->select('amount_ml')->get(),
+  //  ]);
+//});
+
+Route::get('/nutrition-hydration-summary', function (Request $request) {
     $userId = auth()->id();
 
+    $date = $request->query('date') 
+        ? Carbon::parse($request->query('date'))->toDateString()
+        : Carbon::today()->toDateString();
+
     return response()->json([
-        'nutrition' => \App\Models\NutritionEntry::where('user_id', $userId)->select('meal_type', 'calories')->get(),
-        'hydration' => \App\Models\HydrationEntry::where('user_id', $userId)->select('amount_ml')->get(),
+        'date' => $date,
+        'nutrition' => \App\Models\NutritionEntry::where('user_id', $userId)
+                        ->whereDate('created_at', $date)
+                        ->select('meal_type', 'calories')
+                        ->get(),
+        'hydration' => \App\Models\HydrationEntry::where('user_id', $userId)
+                        ->whereDate('created_at', $date)
+                        ->select('amount_ml')
+                        ->get(),
     ]);
 });
 
