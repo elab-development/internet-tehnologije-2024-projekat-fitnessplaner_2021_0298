@@ -31,7 +31,11 @@ class HydrationEntryController extends Controller
 
         //return HydrationEntry::create($validated);
         $entry = HydrationEntry::create($validated);
-        return new HydrationEntryResource($entry);
+        //return new HydrationEntryResource($entry);
+        return response()->json([
+    'msg' => 'Unos vode uspešno kreiran!'
+], 201);
+
     }
 
     public function show($id)
@@ -71,5 +75,21 @@ class HydrationEntryController extends Controller
 
         return response()->json(['message' => 'Deleted']);
     }
+
+    public function getAmountByDate(Request $request)
+{
+    $validated = $request->validate([
+        'entry_date' => 'required|date',
+    ]);
+
+    $totalAmount = HydrationEntry::where('user_id', auth()->id())
+        ->where('entry_date', $validated['entry_date'])
+        ->sum('amount_ml');
+
+    return response()->json([
+        'entry_date' => $validated['entry_date'],
+        'total_amount' => $totalAmount,
+    ]);
+}
 }
 

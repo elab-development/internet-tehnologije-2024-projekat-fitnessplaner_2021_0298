@@ -29,7 +29,11 @@ class WorkoutController extends Controller
         $validated['user_id'] = Auth::id();
         //return Workout::create($validated);
         $workout = Workout::create($validated);
-        return new WorkoutResource($workout);
+        //return new WorkoutResource($workout);
+        return response()->json([
+    'msg' => 'Trening je uspešno kreiran!'
+], 201);
+
     }
 
     public function show($id)

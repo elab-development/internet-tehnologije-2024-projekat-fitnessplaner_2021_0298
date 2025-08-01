@@ -29,7 +29,11 @@ class NutritionEntryController extends Controller
 
         //return NutritionEntry::create($validated);
         $entry = NutritionEntry::create($validated);
-        return new NutritionEntryResource($entry);
+        //return new NutritionEntryResource($entry);
+        return response()->json([
+    'msg' => 'Unos ishrane uspešno kreiran!'
+], 201);
+
     }
 
     public function show($id)
