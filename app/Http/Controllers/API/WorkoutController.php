@@ -13,7 +13,7 @@ class WorkoutController extends Controller
     public function index()
     {
         //return Workout::where('user_id', Auth::id())->get();
-        $workouts = Workout::where('user_id', Auth::id())->get();
+        $workouts = Workout::where('user_id', Auth::id())->paginate(5);
         return WorkoutResource::collection($workouts);
     }
 

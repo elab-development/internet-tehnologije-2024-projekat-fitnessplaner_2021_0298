@@ -48,6 +48,9 @@ Route::get('/nutrition-hydration-summary', function () {
     ]);
 });
 
+Route::get('/nutrition-entries/total-by-date', [NutritionEntryController::class, 'getCaloriesByDate']);
+
+
 
 Route::apiResource('workouts', WorkoutController::class);
     Route::apiResource('nutrition-entries', NutritionEntryController::class);

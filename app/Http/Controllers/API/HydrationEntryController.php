@@ -13,7 +13,7 @@ class HydrationEntryController extends Controller
     public function index()
     {
         //return HydrationEntry::where('user_id', Auth::id())->get();
-        $entries = HydrationEntry::where('user_id', Auth::id())->get();
+        $entries = HydrationEntry::where('user_id', Auth::id())->paginate(5);
         return HydrationEntryResource::collection($entries);
     }
 

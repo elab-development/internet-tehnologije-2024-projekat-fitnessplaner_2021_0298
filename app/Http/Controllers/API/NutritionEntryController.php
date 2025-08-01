@@ -13,7 +13,7 @@ class NutritionEntryController extends Controller
     public function index()
     {
         //return NutritionEntry::where('user_id', Auth::id())->get();
-        $entries = NutritionEntry::where('user_id', Auth::id())->get();
+        $entries = NutritionEntry::where('user_id', Auth::id())->paginate(5);
         return NutritionEntryResource::collection($entries);
     }
 
@@ -70,5 +70,22 @@ class NutritionEntryController extends Controller
 
         return response()->json(['message' => 'Deleted']);
     }
+
+    public function getCaloriesByDate(Request $request)
+{
+    $validated = $request->validate([
+        'entry_date' => 'required|date',
+    ]);
+
+    $totalCalories = NutritionEntry::where('user_id', auth()->id())
+        ->where('entry_date', $validated['entry_date'])
+        ->sum('calories');
+
+    return response()->json([
+        'entry_date' => $validated['entry_date'],
+        'total_calories' => $totalCalories,
+    ]);
+}
+
 }
 
