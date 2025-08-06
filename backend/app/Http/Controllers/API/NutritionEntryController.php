@@ -13,7 +13,11 @@ class NutritionEntryController extends Controller
     public function index()
     {
         //return NutritionEntry::where('user_id', Auth::id())->get();
-        $entries = NutritionEntry::where('user_id', Auth::id())->paginate(5);
+        $entries = NutritionEntry::where('user_id', Auth::id())
+        ->orderBy('created_at', 'desc')
+        ->paginate(5);
+        
+        
         return NutritionEntryResource::collection($entries);
     }
 

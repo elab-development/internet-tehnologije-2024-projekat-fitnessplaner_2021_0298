@@ -20,6 +20,7 @@ class WorkoutResource extends JsonResource
         'day' => $this->day,
         'duration' => $this->duration,
         'workout_date' => $this->workout_date,
+        'exercises' => $this->exercises,
         ];
     }
 }

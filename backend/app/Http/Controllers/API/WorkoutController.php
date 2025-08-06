@@ -25,6 +25,7 @@ class WorkoutController extends Controller
             'workout_date' => 'required|date',
             'day' => 'required|string|max:20',
             'coach_id' => 'nullable|integer',
+            'exercises' => 'nullable|array'
         ]);
         $validated['user_id'] = Auth::id();
         //return Workout::create($validated);
@@ -56,6 +57,7 @@ class WorkoutController extends Controller
             'workout_date' => 'sometimes|date',
             'day' => 'sometimes|string|max:20',
             'coach_id' => 'nullable|integer',
+            'exercises' => 'nullable|array',
         ]);
 
         $workout->update($validated);

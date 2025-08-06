@@ -9,7 +9,12 @@ class Workout extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'workout_date', 'duration', 'day', 'coach_id'];
+    protected $fillable = ['user_id', 'title', 'workout_date', 'duration', 'day', 'coach_id', 'exercises'];
+    
+    protected $casts = [
+        'exercises' => 'array',
+    ];
+
     public function user()
 {
     return $this->belongsTo(User::class);
