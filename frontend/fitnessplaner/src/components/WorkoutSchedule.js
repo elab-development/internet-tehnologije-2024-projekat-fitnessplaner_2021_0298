@@ -101,7 +101,7 @@ export default function WorkoutSchedule() {
 
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
+    <div className="workout-container p-4 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Kreiraj novi trening</h2>
 
       {successMsg && <p className="text-green-600 mb-4">{successMsg}</p>}
@@ -152,7 +152,7 @@ export default function WorkoutSchedule() {
         <label className="block mb-2 font-semibold">Izaberi vežbe:</label>
 <div className="flex flex-wrap gap-4 mb-4">
   {exerciseOptions.map((exercise) => (
-    <label key={exercise.label} className="flex items-center space-x-2">
+    <label key={exercise.label} className="checkbox-label flex items-center space-x-2">
       <input
         type="checkbox"
         value={exercise.label}
@@ -226,15 +226,13 @@ export default function WorkoutSchedule() {
             const video = exerciseOptions.find((ex) => ex.label === exercise);
             if (!video) return null;
             return (
-              <a
-                key={exercise}
-                href={video.videoUrl.replace("embed/", "watch?v=")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                {exercise} Video
-              </a>
+              <Button
+  key={exercise}
+  text={`${exercise} Video`}
+  onClick={() => window.open(video.videoUrl.replace("embed/", "watch?v="), "_blank")}
+  variant="primary"
+/>
+
             );
           })
         ) : (
@@ -252,8 +250,8 @@ export default function WorkoutSchedule() {
       )}
 
       {selectedExercises.length > 0 && (
-        <div className="mt-8">
-          <h4 className="text-lg font-bold mb-2">Pregled videa za vežbe:</h4>
+        <div className="mt-8 bg-white p-4 rounded shadow">
+          <h4 className="text-lg font-bold mb-2 text-gray-800">Pregled videa za vežbe:</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {selectedExercises.map((exercise) => {
               const video = exerciseOptions.find((ex) => ex.label === exercise);

@@ -72,11 +72,11 @@ function TrackNutrition() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="track-nutrition-container">
       <h2>Track Nutrition & Hydration</h2>
 
       <label>
-        Date (optional):
+        Date:
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </label>
 

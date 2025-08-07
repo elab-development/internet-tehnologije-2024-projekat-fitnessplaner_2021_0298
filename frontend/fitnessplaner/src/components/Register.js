@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from './Reusable/Button';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -40,7 +41,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h2>Registracija</h2>
       <form onSubmit={handleRegister}>
         <input
@@ -71,7 +72,8 @@ const Register = () => {
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           required
         /><br/>
-        <button type="submit">Registruj se</button>
+        {/* <button type="submit">Registruj se</button> */}
+        <Button type="submit" text="Registruj se" variant="primary" />
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
