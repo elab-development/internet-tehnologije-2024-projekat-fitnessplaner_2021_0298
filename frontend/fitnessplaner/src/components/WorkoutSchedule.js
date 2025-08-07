@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from './Reusable/Button';
+import Breadcrumbs from './Reusable/Breadcrumbs';
 import axios from 'axios';
 
 const exerciseOptions = [
@@ -102,6 +103,7 @@ export default function WorkoutSchedule() {
 
   return (
     <div className="workout-container p-4 max-w-4xl mx-auto">
+      <Breadcrumbs />
       <h2 className="text-2xl font-bold mb-4">Kreiraj novi trening</h2>
 
       {successMsg && <p className="text-green-600 mb-4">{successMsg}</p>}

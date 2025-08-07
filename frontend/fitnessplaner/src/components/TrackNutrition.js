@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from './Reusable/Button';
+import Breadcrumbs from './Reusable/Breadcrumbs';
 import NoteInput from './NoteInput';
 import axios from 'axios';
 
@@ -11,26 +12,40 @@ function TrackNutrition() {
   const [hydrationLogs, setHydrationLogs] = useState([]);
   const [date, setDate] = useState('');
 
+  const [nutritionPage, setNutritionPage] = useState(1);
+  const [hydrationPage, setHydrationPage] = useState(1);
+  const [nutritionLastPage, setNutritionLastPage] = useState(1);
+  const [hydrationLastPage, setHydrationLastPage] = useState(1);
+
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchLogs();
-  }, [date]);
+  }, [date, nutritionPage, hydrationPage]);
 
   const fetchLogs = async () => {
     try {
       const responseNutrition = await axios.get('http://localhost:8000/api/nutrition-entries', {
-        params: date ? { date } : {},
+        params: {
+          ...(date && { date }),
+          page: nutritionPage,
+        },
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const responseHydration = await axios.get('http://localhost:8000/api/hydration-entries', {
-        params: date ? { date } : {},
+        params: {
+          ...(date && { date }),
+          page: hydrationPage,
+        },
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setNutritionLogs(responseNutrition.data.data); // <-- ovde uzimamo samo niz iz paginacije
-      setHydrationLogs(responseHydration.data.data); // <-- isto ovde
+      setNutritionLogs(responseNutrition.data.data);
+      setNutritionLastPage(responseNutrition.data.meta.last_page);
+
+      setHydrationLogs(responseHydration.data.data);
+      setHydrationLastPage(responseHydration.data.meta.last_page);
     } catch (error) {
       console.error('Error fetching logs:', error);
     }
@@ -74,6 +89,7 @@ function TrackNutrition() {
 
   return (
     <div className="track-nutrition-container">
+      <Breadcrumbs />
       <h2>Track Nutrition & Hydration</h2>
 
       <label>
@@ -103,10 +119,7 @@ function TrackNutrition() {
             required
           />
         </label>
-        {/* <button type="submit">Add Meal</button> */}
         <Button type="submit" text="Add Meal" variant="primary" />
-      
-
       </form>
 
       <h3>Log Hydration</h3>
@@ -120,7 +133,6 @@ function TrackNutrition() {
             required
           />
         </label>
-        {/* <button type="submit">Add Hydration</button> */}
         <Button type="submit" text="Add Hydration" variant="primary" />
       </form>
 
@@ -136,6 +148,21 @@ function TrackNutrition() {
           </li>
         ))}
       </ul>
+      <div className="pagination-buttons">
+        <Button
+          text="Prethodna"
+          onClick={() => setNutritionPage(prev => Math.max(prev - 1, 1))}
+          variant="secondary"
+          disabled={nutritionPage === 1}
+        />
+        <span style={{ margin: '0 1rem' }}>Strana {nutritionPage} od {nutritionLastPage}</span>
+        <Button
+          text="Sledeća"
+          onClick={() => setNutritionPage(prev => Math.min(prev + 1, nutritionLastPage))}
+          variant="secondary"
+          disabled={nutritionPage === nutritionLastPage}
+        />
+      </div>
 
       <h3>Daily Hydration Log</h3>
       <ul>
@@ -145,6 +172,21 @@ function TrackNutrition() {
           </li>
         ))}
       </ul>
+      <div className="pagination-buttons">
+        <Button
+          text="Prethodna"
+          onClick={() => setHydrationPage(prev => Math.max(prev - 1, 1))}
+          variant="secondary"
+          disabled={hydrationPage === 1}
+        />
+        <span style={{ margin: '0 1rem' }}>Strana {hydrationPage} od {hydrationLastPage}</span>
+        <Button
+          text="Sledeća"
+          onClick={() => setHydrationPage(prev => Math.min(prev + 1, hydrationLastPage))}
+          variant="secondary"
+          disabled={hydrationPage === hydrationLastPage}
+        />
+      </div>
     </div>
   );
 }

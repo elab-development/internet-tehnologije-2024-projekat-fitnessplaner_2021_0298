@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DailyMessage from './DailyMessage';
 
+
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -38,6 +39,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container p-6 max-w-3xl mx-auto">
+        
       <h1 className="text-3xl font-bold mb-6">Welcome to Fitness Planner</h1>
       <DailyMessage />
 
