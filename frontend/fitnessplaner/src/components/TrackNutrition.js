@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from './Reusable/Button';
 import Breadcrumbs from './Reusable/Breadcrumbs';
 import NoteInput from './NoteInput';
+import ProteinCalculator from './ProteinCalculator';
 import axios from 'axios';
 
 function TrackNutrition() {
@@ -139,6 +140,7 @@ function TrackNutrition() {
       <hr />
 
       <NoteInput />
+      <ProteinCalculator />
 
       <h3>Daily Nutrition Log</h3>
       <ul>
