@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from './Reusable/Button';
+import NoteInput from './NoteInput';
 import axios from 'axios';
 
 function TrackNutrition() {
@@ -124,6 +125,8 @@ function TrackNutrition() {
       </form>
 
       <hr />
+
+      <NoteInput />
 
       <h3>Daily Nutrition Log</h3>
       <ul>
