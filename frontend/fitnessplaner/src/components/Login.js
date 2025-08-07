@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from './Reusable/Button';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
@@ -7,9 +8,11 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch('http://localhost:8000/api/login', {
@@ -34,6 +37,11 @@ const Login = () => {
     } catch (err) {
       setError('Greška na serveru');
     }
+
+    finally {
+      setLoading(false);
+    }
+    
   };
 
   return (
@@ -54,7 +62,15 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         /><br />
-        <button type="submit">Login</button>
+        {/* <button type="submit">Login</button> */}
+
+        <Button
+        type="submit"
+        text={loading ? 'Prijavljivanje...' : 'Prijavi se'}
+        variant="primary"
+        disabled={loading}
+      />
+
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

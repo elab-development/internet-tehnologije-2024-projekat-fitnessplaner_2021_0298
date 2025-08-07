@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Button from './Reusable/Button';
 import axios from 'axios';
 
 function TrackNutrition() {
@@ -101,7 +102,10 @@ function TrackNutrition() {
             required
           />
         </label>
-        <button type="submit">Add Meal</button>
+        {/* <button type="submit">Add Meal</button> */}
+        <Button type="submit" text="Add Meal" variant="primary" />
+      
+
       </form>
 
       <h3>Log Hydration</h3>
@@ -115,7 +119,8 @@ function TrackNutrition() {
             required
           />
         </label>
-        <button type="submit">Add Hydration</button>
+        {/* <button type="submit">Add Hydration</button> */}
+        <Button type="submit" text="Add Hydration" variant="primary" />
       </form>
 
       <hr />

@@ -57,18 +57,18 @@ input {
   font-size: 1rem;
 }
 
-button {
+/* button {
   padding: 0.75rem;
   font-size: 1rem;
   background: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;
-}
+} */
 
-button:hover {
+/* button:hover {
   background: #45a049;
-}
+} */
 
 
 
@@ -80,12 +80,12 @@ button:hover {
   text-align: center;
 }
 
-.dashboard-buttons {
+/* .dashboard-buttons {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
-}
+} */
 
 .dashboard-link {
   background-color: #4CAF50;
@@ -100,4 +100,98 @@ button:hover {
 .dashboard-link:hover {
   background-color: #45a049;
 }
+
+/* za footer */
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1f2937; /* tamno siva, možeš menjati */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* Kontejner desnog dela u footeru da ih rasporedi i doda razmak */
+.footer div:last-child {
+  display: flex;
+  gap: 20px; /* razmak između linka i dugmeta */
+  align-items: center;
+  padding-right: 30px; /* dodaje malo prostora sa desne strane da dugme ne bude uz ivicu */
+}
+
+.footer .logout-button {
+  background-color: #ef4444; /* crvena boja */
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.footer .logout-button:hover {
+  background-color: #dc2626; /* tamnija crvena za hover */
+}
+
+
+/* za button */
+
+.custom-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+/* Boje za različite varijante */
+.custom-button.primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.custom-button.primary:hover {
+  background-color: #1e40af;
+}
+
+.custom-button.secondary {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.custom-button.secondary:hover {
+  background-color: #d1d5db;
+}
+
+.custom-button.danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.custom-button.danger:hover {
+  background-color: #dc2626;
+}
+
+/* Ikonica unutar dugmeta */
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Button from './Reusable/Button';
 import axios from 'axios';
 
 const exerciseOptions = [
@@ -20,6 +21,8 @@ export default function WorkoutSchedule() {
   const [filteredWorkouts, setFilteredWorkouts] = useState([]);
   const [successMsg, setSuccessMsg] = useState('');
   const [coachId, setCoachId] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
 
   useEffect(() => {
@@ -53,6 +56,7 @@ export default function WorkoutSchedule() {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+  setLoading(true);
 
   try {
     const token = localStorage.getItem('token');  // Dodaj ovo da uzmeš token
@@ -78,6 +82,7 @@ export default function WorkoutSchedule() {
     setDuration('');
     setWorkoutDate('');
     setSelectedExercises([]);
+    setCoachId('');
 
     // Re-fetch all workouts
     fetchAllWorkouts();
@@ -88,6 +93,9 @@ export default function WorkoutSchedule() {
 
   } catch (error) {
     console.error("Error submitting workout:", error);
+  }
+  finally {
+    setLoading(false); // ⬅️ loading gotov
   }
 };
 
@@ -164,21 +172,37 @@ export default function WorkoutSchedule() {
 </div>
 
 
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        {/* <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           Sačuvaj trening
-        </button>
+        </button> */}
+
+        <Button
+  type="submit"
+  text={loading ? "Sačekajte..." : "Sačuvaj trening"}
+  variant="primary"
+  disabled={loading}
+/>
+        
+
       </form>
 
       <h3 className="text-xl font-semibold mb-2">View Workouts by Day:</h3>
       <div className="flex flex-wrap gap-2 mb-4">
         {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((d) => (
-          <button
-            key={d}
-            onClick={() => fetchWorkoutsForDay(d)}
-            className="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400"
-          >
-            {d}
-          </button>
+          // <button
+          //   key={d}
+          //   onClick={() => fetchWorkoutsForDay(d)}
+          //   className="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400"
+          // >
+          //   {d}
+          // </button>
+          <Button
+    key={d}
+    onClick={() => fetchWorkoutsForDay(d)}
+    text={d}
+    variant="secondary"
+    className="mr-2 mb-2"  // dodaj ako želiš razmak između dugmadi
+  />
         ))}
       </div>
 
