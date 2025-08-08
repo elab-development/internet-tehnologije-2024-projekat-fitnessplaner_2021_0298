@@ -45,6 +45,33 @@ export default function WorkoutSchedule() {
   }
 };
 
+
+const handleDeleteWorkout = async (id) => {
+  const confirmDelete = window.confirm("Da li ste sigurni da želite da obrišete ovaj trening?");
+  if (!confirmDelete) return;
+
+  try {
+    const token = localStorage.getItem('token');
+    await axios.delete(`http://127.0.0.1:8000/api/workouts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Osveži listu treninga
+    fetchAllWorkouts();
+    if (selectedDay) {
+      fetchWorkoutsForDay(selectedDay);
+    }
+
+    alert("Trening uspešno obrisan.");
+  } catch (error) {
+    console.error("Greška pri brisanju treninga:", error);
+    alert("Greška pri brisanju treninga.");
+  }
+};
+
+
   const fetchWorkoutsForDay = async (day) => {
   try {
     const token = localStorage.getItem('token');
@@ -219,36 +246,44 @@ export default function WorkoutSchedule() {
           ) : (
             <ul className="space-y-2">
   {filteredWorkouts.map((w) => (
-  <li
-    key={w.id}
-    className="border p-3 rounded bg-white shadow flex flex-col md:flex-row md:items-center md:justify-between"
-  >
-    <div>
-      <strong>{w.title}</strong> – {w.duration} minuta
-      <div className="mt-2 flex flex-wrap gap-2">
-        {w.exercises && w.exercises.length > 0 ? (
-          w.exercises.map((exercise) => {
-            const video = exerciseOptions.find((ex) => ex.label === exercise);
-            if (!video) return null;
-            return (
-              <Button
-  key={exercise}
-  text={`${exercise} Video`}
-  onClick={() => window.open(video.videoUrl.replace("embed/", "watch?v="), "_blank")}
-  variant="primary"
-/>
-
-            );
-          })
-        ) : (
-          <p className="text-sm text-gray-500">Nema vezanih vežbi</p>
-        )}
+    <li
+      key={w.id}
+      className="border p-3 rounded bg-white shadow flex flex-col md:flex-row md:items-center md:justify-between"
+    >
+      <div className="flex-1">
+        <strong>{w.title}</strong> – {w.duration} minuta
+        <div className="mt-2 flex flex-wrap gap-2">
+          {w.exercises && w.exercises.length > 0 ? (
+            w.exercises.map((exercise) => {
+              const video = exerciseOptions.find((ex) => ex.label === exercise);
+              if (!video) return null;
+              return (
+                <Button
+                  key={exercise}
+                  text={`${exercise} Video`}
+                  onClick={() => window.open(video.videoUrl.replace("embed/", "watch?v="), "_blank")}
+                  variant="primary"
+                />
+              );
+            })
+          ) : (
+            <p className="text-sm text-gray-500">Nema vezanih vežbi</p>
+          )}
+        </div>
       </div>
-    </div>
-  </li>
-))}
 
+      {/* Delete dugme */}
+      <div className="mt-4 md:mt-0 md:ml-4">
+        <Button
+          text="Obriši"
+          onClick={() => handleDeleteWorkout(w.id)}
+          variant="danger"
+        />
+      </div>
+    </li>
+  ))}
 </ul>
+
 
           )}
         </div>

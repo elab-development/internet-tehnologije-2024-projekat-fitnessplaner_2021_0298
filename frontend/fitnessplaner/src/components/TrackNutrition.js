@@ -52,6 +52,34 @@ function TrackNutrition() {
     }
   };
 
+
+  const handleDeleteNutrition = async (id) => {
+  if (!window.confirm('Da li sigurno želiš da obrišeš ovaj unos hrane?')) return;
+
+  try {
+    await axios.delete(`http://localhost:8000/api/nutrition-entries/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchLogs();
+  } catch (error) {
+    console.error('Greška pri brisanju nutrijenta:', error);
+  }
+};
+
+const handleDeleteHydration = async (id) => {
+  if (!window.confirm('Da li sigurno želiš da obrišeš ovaj unos hidratacije?')) return;
+
+  try {
+    await axios.delete(`http://localhost:8000/api/hydration-entries/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchLogs();
+  } catch (error) {
+    console.error('Greška pri brisanju hidratacije:', error);
+  }
+};
+
+
   const handleNutritionSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -144,12 +172,23 @@ function TrackNutrition() {
 
       <h3>Daily Nutrition Log</h3>
       <ul>
-        {nutritionLogs.map((log) => (
-          <li key={log.id}>
-            {log.entry_date} - {log.meal_type} - {log.calories} kcal
-          </li>
-        ))}
-      </ul>
+  {nutritionLogs.map((log) => (
+    <li key={log.id} className="flex justify-between items-center border p-2 mb-2 rounded">
+      <span>{log.entry_date} - {log.meal_type} - {log.calories} kcal</span>
+      <div className="ml-auto">
+        <Button
+          text="Obriši"
+          onClick={() => handleDeleteNutrition(log.id)}
+          variant="danger"
+        />
+      </div>
+    </li>
+  ))}
+</ul>
+
+
+
+
       <div className="pagination-buttons">
         <Button
           text="Prethodna"
@@ -168,12 +207,20 @@ function TrackNutrition() {
 
       <h3>Daily Hydration Log</h3>
       <ul>
-        {hydrationLogs.map((log) => (
-          <li key={log.id}>
-            {log.entry_date} - {log.amount_ml} ml
-          </li>
-        ))}
-      </ul>
+  {hydrationLogs.map((log) => (
+    <li key={log.id} className="flex justify-between items-center border p-2 mb-2 rounded">
+      <span>{log.entry_date} - {log.amount_ml} ml</span>
+      <div className="ml-auto">
+        <Button
+          text="Obriši"
+          onClick={() => handleDeleteNutrition(log.id)}
+          variant="danger"
+        />
+      </div>
+    </li>
+  ))}
+</ul>
+
       <div className="pagination-buttons">
         <Button
           text="Prethodna"
