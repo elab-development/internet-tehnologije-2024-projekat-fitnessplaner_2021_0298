@@ -4,11 +4,14 @@ import Breadcrumbs from './Reusable/Breadcrumbs';
 import axios from 'axios';
 
 const exerciseOptions = [
-  { label: "Grudi", videoUrl: "https://www.youtube.com/embed/eozdVDA78K0" },
-  { label: "Ledja", videoUrl: "https://www.youtube.com/embed/_R3h6cZk8Dg" },
+  { label: "Grudi", videoUrl: "https://www.youtube.com/embed/fGm-ef-4PVk" },
+  { label: "Ledja", videoUrl: "https://www.youtube.com/embed/jLvqKgW-_G8" },
   { label: "Biceps", videoUrl: "https://www.youtube.com/embed/ykJmrZ5v0Oo" },
-  { label: "Noge", videoUrl: "https://www.youtube.com/embed/vcBig73ojpE" },
+  { label: "Noge", videoUrl: "https://www.youtube.com/embed/H6mRkx1x77k" },
   { label: "Kardio", videoUrl: "https://www.youtube.com/embed/ml6cT4AZdqI" },
+  { label: "Triceps", videoUrl: "https://www.youtube.com/embed/OpRMRhr0Ycc" },
+  { label: "Trbušnjaci", videoUrl: "https://www.youtube.com/embed/1G0y8D5rFDc" },
+  { label: "Ramena", videoUrl: "https://www.youtube.com/embed/21lYP86dHW4" },
 ];
 
 export default function WorkoutSchedule() {
