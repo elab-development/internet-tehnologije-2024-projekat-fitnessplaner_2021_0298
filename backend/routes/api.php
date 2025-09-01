@@ -7,6 +7,7 @@ use App\Http\Controllers\API\WorkoutController;
 use App\Http\Controllers\API\NutritionEntryController;
 use App\Http\Controllers\API\HydrationEntryController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ExternalNutritionController;
 
 use Illuminate\Support\Carbon;
 
@@ -23,10 +24,15 @@ Route::middleware('auth:sanctum')->get('/test-auth', function () {
 });
 
 
+Route::get('/external/nutrition', [ExternalNutritionController::class, 'lookup']);
+
+
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+   
     
 
     Route::get('/nutrition-entries/total-calories', function () {

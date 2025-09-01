@@ -3,6 +3,7 @@ import Button from './Reusable/Button';
 import Breadcrumbs from './Reusable/Breadcrumbs';
 import NoteInput from './NoteInput';
 import ProteinCalculator from './ProteinCalculator';
+import FoodLookup from './FoodLookup';
 import axios from 'axios';
 
 function TrackNutrition() {
@@ -166,6 +167,8 @@ const handleDeleteHydration = async (id) => {
       </form>
 
       <hr />
+
+      <FoodLookup />
 
       <NoteInput />
       <ProteinCalculator />

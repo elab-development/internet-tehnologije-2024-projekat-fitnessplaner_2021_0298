@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import TrackNutrition from './components/TrackNutrition';
 import WorkoutSchedule from './components/WorkoutSchedule';
+import FoodLookup from './components/FoodLookup';
 
 function AppWrapper() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function AppWrapper() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/track-nutrition" element={<TrackNutrition />} />
         <Route path="/workout-schedule" element={<WorkoutSchedule />} />
+        <Route path="/food-check" element={<FoodLookup  />} />
       </Routes>
 
       {showFooter && <Footer onLogout={handleLogout} />}
