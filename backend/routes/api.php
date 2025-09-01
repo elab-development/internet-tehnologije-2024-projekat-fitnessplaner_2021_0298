@@ -8,6 +8,7 @@ use App\Http\Controllers\API\NutritionEntryController;
 use App\Http\Controllers\API\HydrationEntryController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ExternalNutritionController;
+use App\Http\Controllers\API\CoachController;
 
 use Illuminate\Support\Carbon;
 
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/test-auth', function () {
 
 Route::get('/external/nutrition', [ExternalNutritionController::class, 'lookup']);
 
+Route::middleware('auth:sanctum')->get('/coach/users', [CoachController::class, 'getUsers']);
 
 
 Route::middleware('auth:sanctum')->group(function () {

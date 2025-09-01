@@ -10,6 +10,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
   const [error, setError] = useState('');
+  const [role, setRole] = useState('user');
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -25,17 +26,30 @@ const Register = () => {
           email,
           password,
           password_confirmation,
+          role,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/login'); // registracija uspešna → vodi korisnika na login
+        // sačuvaj role i token ako backend vraća token
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        localStorage.setItem('role', role);
+
+        // preusmeri korisnika na odgovarajući dashboard
+        if (role === 'user') {
+          navigate('/dashboard');
+        } else if (role === 'coach') {
+          navigate('/coach-dashboard');
+        }
       } else {
         setError(data.message || 'Registracija nije uspela');
       }
     } catch (err) {
+      console.error(err);
       setError('Greška na serveru');
     }
   };
@@ -72,6 +86,10 @@ const Register = () => {
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           required
         /><br/>
+        <select value={role} onChange={(e) => setRole(e.target.value)} className="role-select">
+  <option value="user">Korisnik</option>
+  <option value="coach">Trener</option>
+</select>
         {/* <button type="submit">Registruj se</button> */}
         <Button type="submit" text="Registruj se" variant="primary" />
       </form>

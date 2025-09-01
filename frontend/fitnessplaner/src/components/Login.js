@@ -26,14 +26,18 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ Sačuvaj token u localStorage
-        localStorage.setItem('token', data.access_token);
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('role', data.role); // čuvamo ulogu
 
-        // ✅ Preusmeri korisnika
-        navigate('/dashboard');
-      } else {
-        setError(data.message || 'Neuspešan login');
-      }
+    // Preusmeravanje u zavisnosti od uloge
+    if (data.role === 'coach') {
+        navigate('/coach-dashboard');
+    } else {
+        navigate('/dashboard'); // običan korisnik
+    }
+} else {
+    setError(data.message || 'Neuspešan login');
+}
     } catch (err) {
       setError('Greška na serveru');
     }

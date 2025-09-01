@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -61,6 +62,19 @@ public function nutritionEntries()
 public function hydrationEntries()
 {
     return $this->hasMany(HydrationEntry::class);
+}
+
+
+public function trainings()
+{
+    return $this->hasMany(Workout::class); 
+}
+
+
+
+public function coachedWorkouts()
+{
+    return $this->hasMany(Workout::class, 'coach_id');
 }
 
 }

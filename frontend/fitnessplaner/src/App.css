@@ -680,3 +680,47 @@ hr {
   color: #6b7280;
   text-align: right;
 }
+
+
+
+
+/* za izbor na login formi  */
+.role-select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.role-select:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+
+
+/* za coach dashboard */
+.coach-dashboard {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.user-card {
+  background: white;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.user-card h3 {
+  margin-bottom: 10px;
+  color: #1e293b;
+}

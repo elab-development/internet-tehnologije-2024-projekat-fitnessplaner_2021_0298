@@ -11,6 +11,7 @@ import Dashboard from './components/Dashboard';
 import TrackNutrition from './components/TrackNutrition';
 import WorkoutSchedule from './components/WorkoutSchedule';
 import FoodLookup from './components/FoodLookup';
+import CoachDashboard from './components/CoachDashboard';
 
 function AppWrapper() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function AppWrapper() {
         <Route path="/track-nutrition" element={<TrackNutrition />} />
         <Route path="/workout-schedule" element={<WorkoutSchedule />} />
         <Route path="/food-check" element={<FoodLookup  />} />
+        <Route path="/coach-dashboard" element={<CoachDashboard />} />
       </Routes>
 
       {showFooter && <Footer onLogout={handleLogout} />}

@@ -20,4 +20,9 @@ class Workout extends Model
     return $this->belongsTo(User::class);
 }
 
+public function coach()
+{
+    return $this->belongsTo(User::class, 'coach_id');
+}
+
 }
