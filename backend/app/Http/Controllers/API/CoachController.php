@@ -31,6 +31,7 @@ class CoachController extends Controller
                             'title' => $workout->title,
                             'description' => $workout->description ?? '',
                             'day' => $workout->day,
+                            'exercises' => $workout->exercises,
                             'workout_date' => $workout->workout_date,
                         ];
                     }),

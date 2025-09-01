@@ -16,10 +16,11 @@ import CoachDashboard from './components/CoachDashboard';
 function AppWrapper() {
   const location = useLocation();
   const navigate = useNavigate();
+  const role = localStorage.getItem('role');
 
   // Rute gde NE želimo da se prikazuje NavBar
   const noNavRoutes = ['/', '/register', '/dashboard'];
-  const showNav = !noNavRoutes.includes(location.pathname);
+  const showNav = !noNavRoutes.includes(location.pathname) && role !== 'coach';
 
   // Rute gde NE želimo da se prikazuje Footer
   const noFooterRoutes = ['/', '/register'];

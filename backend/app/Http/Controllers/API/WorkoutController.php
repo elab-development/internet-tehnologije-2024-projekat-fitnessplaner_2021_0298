@@ -45,33 +45,50 @@ class WorkoutController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        //$workout = Workout::where('user_id', Auth::id())->findOrFail($id);
-        //$workout->update($request->only(['title', 'duration']));
-        //return $workout;
-        $workout = Workout::where('user_id', Auth::id())->findOrFail($id);
+{
+    $user = $request->user();
 
-        $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'duration' => 'sometimes|integer',
-            'workout_date' => 'sometimes|date',
-            'day' => 'sometimes|string|max:20',
-            'coach_id' => 'nullable|integer',
-            'exercises' => 'nullable|array',
-        ]);
+    $workout = Workout::findOrFail($id);
 
-        $workout->update($validated);
-
-        return new WorkoutResource($workout);
+    // Provera prava: korisnik ili trener koji je vezan za trening
+    if ($workout->user_id !== $user->id && $workout->coach_id !== $user->id) {
+        return response()->json(['message' => 'Nije dozvoljeno'], 403);
     }
+
+    $validated = $request->validate([
+        'title' => 'sometimes|string|max:255',
+        'duration' => 'sometimes|integer',
+        'workout_date' => 'sometimes|date',
+        'day' => 'sometimes|string|max:20',
+        'coach_id' => 'nullable|integer',
+        'exercises' => 'nullable|array',
+    ]);
+
+    $workout->update($validated);
+
+    return new WorkoutResource($workout);
+}
+
 
     public function destroy($id)
-    {
-        $workout = Workout::where('user_id', Auth::id())->findOrFail($id);
-        $workout->delete();
-        return response()->json(['message' => 'Deleted']);
+{
+    $workout = Workout::findOrFail($id);
+
+    $currentUser = Auth::user();
+
+    // Provera: korisnik može da briše svoj trening, trener može da briše treninge svojih korisnika
+    if ($currentUser->role === 'user' && $workout->user_id !== $currentUser->id) {
+        return response()->json(['message' => 'Nemate dozvolu da obrišete ovaj trening'], 403);
     }
 
+    if ($currentUser->role === 'coach' && $workout->coach_id !== $currentUser->id) {
+        return response()->json(['message' => 'Nemate dozvolu da obrišete ovaj trening'], 403);
+    }
+
+    $workout->delete();
+
+    return response()->json(['message' => 'Trening uspešno obrisan']);
+}
     public function getByDay($day)
 {
     // Validacija dana u nedelji (opcionalno)
