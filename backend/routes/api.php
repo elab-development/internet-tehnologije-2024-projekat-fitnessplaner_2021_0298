@@ -17,6 +17,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->put('/workouts/{id}', [WorkoutController::class, 'update']);
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/coach/add-workout', [WorkoutController::class, 'storeForUser']);
+});
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

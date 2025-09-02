@@ -69,6 +69,34 @@ class WorkoutController extends Controller
     return new WorkoutResource($workout);
 }
 
+public function storeForUser(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'title' => 'required|string',
+        'workout_date' => 'required|date',
+        'day' => 'required|string',
+        'duration' => 'nullable|integer',
+        'exercises' => 'nullable|array',
+        'exercises.*' => 'string|max:255',
+    ]);
+
+    $workout = Workout::create([
+        'user_id' => $request->user_id,
+        'title' => $request->title,
+        'workout_date' => $request->workout_date,
+        'day' => $request->day,
+        'duration' => $request->duration,
+        'exercises' => $request->exercises,
+        'coach_id' => auth()->id(), // trener koji pravi
+    ]);
+
+    return response()->json([
+        'message' => 'Workout successfully created for user',
+        'workout' => $workout,
+    ], 201);
+}
+
 
     public function destroy($id)
 {

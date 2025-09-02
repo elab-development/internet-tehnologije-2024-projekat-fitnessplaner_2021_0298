@@ -39,4 +39,33 @@ class CoachController extends Controller
             })
         );
     }
+
+    public function addWorkout(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'title' => 'required|string|max:255',
+        'day' => 'nullable|string|max:255',
+        'workout_date' => 'required|date',
+        'duration' => 'nullable|integer',
+        'exercises' => 'nullable|array', // <-- promenjeno sa json na array
+        'exercises.*' => 'string|max:255', // svaki element niza je string
+    ]);
+
+    $workout = \App\Models\Workout::create([
+        'user_id' => $request->user_id,
+        'title' => $request->title,
+        'day' => $request->day,
+        'workout_date' => $request->workout_date,
+        'duration' => $request->duration,
+        'coach_id' => $request->user()->id,
+        'exercises' => $request->exercises, // šalješ običan niz iz React-a
+    ]);
+
+    return response()->json([
+        'message' => 'Workout created successfully',
+        'workout' => $workout
+    ]);
+}
+
 }

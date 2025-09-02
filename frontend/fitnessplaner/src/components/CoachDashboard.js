@@ -12,6 +12,17 @@ export default function CoachDashboard() {
   const [editDay, setEditDay] = useState('');
   const [editExercises, setEditExercises] = useState([]);
 
+  const [newWorkout, setNewWorkout] = useState({
+  title: '',
+  workout_date: '',
+  day: '',
+  duration: '',
+  exercises: [],
+});
+
+const [addingUserId, setAddingUserId] = useState(null); // čuvamo kod kog usera se dodaje
+
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -36,6 +47,45 @@ export default function CoachDashboard() {
       setLoading(false);
     }
   };
+
+
+  const handleAddWorkout = async (userId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/api/coach/add-workout",
+      {
+        user_id: userId,
+        title: newWorkout.title,
+        day: newWorkout.day,
+        workout_date: newWorkout.workout_date || new Date().toISOString().split("T")[0], // ako nije unet datum, uzmi današnji
+        duration: newWorkout.duration,
+        exercises: newWorkout.exercises, // mora JSON string
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // update state da odmah prikaže novi trening
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.id === userId
+          ? { ...user, trainings: [...user.trainings, response.data.workout] }
+          : user
+      )
+    );
+
+    // reset forme
+    setAddingUserId(null);
+    setNewWorkout({ title: "", workout_date: "", day: "", duration: "", exercises: [] });
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert("Greška pri dodavanju treninga: " + JSON.stringify(err.response?.data));
+  }
+};
+
+
 
   const handleDelete = async (workoutId) => {
     const token = localStorage.getItem('token');
@@ -173,13 +223,20 @@ export default function CoachDashboard() {
                       <div className="flex justify-between items-center">
                         <div>
                           <strong>{training.title}</strong> – {training.day || 'Nema dana'}
-                          {training.exercises && training.exercises.length > 0 && (
-                            <ul className="pl-5 text-sm text-gray-600 list-disc">
-                              {training.exercises.map((exercise, idx) => (
-                                <li key={idx}>{exercise}</li>
-                              ))}
-                            </ul>
-                          )}
+                          {(() => {
+  const exercises = Array.isArray(training.exercises)
+    ? training.exercises
+    : JSON.parse(training.exercises || "[]");
+
+  return exercises.length > 0 ? (
+    <ul className="pl-5 text-sm text-gray-600 list-disc">
+      {exercises.map((exercise, idx) => (
+        <li key={idx}>{exercise}</li>
+      ))}
+    </ul>
+  ) : null;
+})()}
+
                         </div>
                         <div className="flex gap-2">
                           <Button text="Izmeni" variant="primary" onClick={() => startEditing(training)} />
@@ -193,6 +250,93 @@ export default function CoachDashboard() {
                 <li>Nema treninga</li>
               )}
             </ul>
+
+                  <div className="mt-3">
+  {addingUserId === user.id ? (
+    <div className="border p-3 rounded bg-gray-50">
+      <input
+        type="text"
+        placeholder="Naziv treninga"
+        value={newWorkout.title}
+        onChange={(e) => setNewWorkout({ ...newWorkout, title: e.target.value })}
+        className="border p-1 rounded w-full mb-2"
+      />
+      <input
+        type="datetime-local"
+        value={newWorkout.workout_date}
+        onChange={(e) => setNewWorkout({ ...newWorkout, workout_date: e.target.value })}
+        className="border p-1 rounded w-full mb-2"
+      />
+      <input
+        type="text"
+        placeholder="Dan"
+        value={newWorkout.day}
+        onChange={(e) => setNewWorkout({ ...newWorkout, day: e.target.value })}
+        className="border p-1 rounded w-full mb-2"
+      />
+      <input
+        type="number"
+        placeholder="Trajanje (min)"
+        value={newWorkout.duration}
+        onChange={(e) => setNewWorkout({ ...newWorkout, duration: e.target.value })}
+        className="border p-1 rounded w-full mb-2"
+      />
+
+      <h4 className="text-sm font-semibold mb-1">Vežbe:</h4>
+      {newWorkout.exercises.map((ex, idx) => (
+        <div key={idx} className="flex gap-2 mb-1">
+          <select
+            value={ex}
+            onChange={(e) => {
+              const updated = [...newWorkout.exercises];
+              updated[idx] = e.target.value;
+              setNewWorkout({ ...newWorkout, exercises: updated });
+            }}
+            className="border p-1 rounded flex-1"
+          >
+            <option value="">Izaberi vežbu</option>
+            <option value="Grudi">Grudi</option>
+            <option value="Ledja">Ledja</option>
+            <option value="Biceps">Biceps</option>
+            <option value="Noge">Noge</option>
+            <option value="Kardio">Kardio</option>
+            <option value="Triceps">Triceps</option>
+            <option value="Trbušnjaci">Trbušnjaci</option>
+            <option value="Ramena">Ramena</option>
+          </select>
+          <button
+            type="button"
+            onClick={() =>
+              setNewWorkout({
+                ...newWorkout,
+                exercises: newWorkout.exercises.filter((_, i) => i !== idx),
+              })
+            }
+            className="text-red-500"
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => setNewWorkout({ ...newWorkout, exercises: [...newWorkout.exercises, ''] })}
+        className="text-blue-600 text-sm mb-2"
+      >
+        Dodaj vežbu
+      </button>
+
+      <div className="flex gap-2">
+        <Button text="Sačuvaj" variant="primary" onClick={() => handleAddWorkout(user.id)} />
+        <Button text="Otkaži" variant="danger" onClick={() => setAddingUserId(null)} />
+      </div>
+    </div>
+  ) : (
+    <Button text="Dodaj trening" variant="primary" onClick={() => setAddingUserId(user.id)} />
+  )}
+</div>
+
+
           </div>
         ))
       )}
