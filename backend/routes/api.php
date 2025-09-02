@@ -12,6 +12,10 @@ use App\Http\Controllers\API\CoachController;
 
 use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -22,6 +26,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

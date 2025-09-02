@@ -12,6 +12,9 @@ import TrackNutrition from './components/TrackNutrition';
 import WorkoutSchedule from './components/WorkoutSchedule';
 import FoodLookup from './components/FoodLookup';
 import CoachDashboard from './components/CoachDashboard';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+
 
 function AppWrapper() {
   const location = useLocation();
@@ -44,6 +47,8 @@ function AppWrapper() {
         <Route path="/workout-schedule" element={<WorkoutSchedule />} />
         <Route path="/food-check" element={<FoodLookup  />} />
         <Route path="/coach-dashboard" element={<CoachDashboard />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
       {showFooter && <Footer onLogout={handleLogout} />}
