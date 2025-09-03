@@ -107,6 +107,10 @@ Route::apiResource('workouts', WorkoutController::class);
 Route::get('/nutrition-daily-calories', [NutritionEntryController::class, 'getDailyCalories'])->middleware('auth:sanctum');
 
 
+// ugnjezdene rute
+Route::get('/users/{user}/nutrition-entries', [NutritionEntryController::class, 'getByUser']);
+Route::get('/users/{user}/workouts', [WorkoutController::class, 'getByUser']);
+
 
 
 Route::middleware('auth:sanctum')->get('/nutrition-hydration-summary/pdf', function (Request $request) {

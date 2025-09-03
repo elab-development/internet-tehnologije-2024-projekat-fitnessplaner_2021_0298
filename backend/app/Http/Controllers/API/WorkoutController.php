@@ -163,6 +163,13 @@ class WorkoutController extends Controller
         }
     }
 
+    public function getByUser($userId)
+{
+    $workouts = \App\Models\Workout::where('user_id', $userId)->get();
+    return response()->json($workouts);
+}
+
+
     public function getByDay($day)
     {
         $validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

@@ -96,6 +96,13 @@ class NutritionEntryController extends Controller
     ]);
 }
 
+public function getByUser($userId)
+{
+    $entries = \App\Models\NutritionEntry::where('user_id', $userId)->get();
+    return response()->json($entries);
+}
+
+
 
 public function getDailyCalories()
 {
