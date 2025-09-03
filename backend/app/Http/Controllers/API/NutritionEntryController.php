@@ -7,6 +7,7 @@ use App\Models\NutritionEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\NutritionEntryResource;
+use Illuminate\Support\Facades\DB;
 
 class NutritionEntryController extends Controller
 {

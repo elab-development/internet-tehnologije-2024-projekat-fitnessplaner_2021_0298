@@ -36,7 +36,7 @@ export default function FoodLookup() {
 
   return (
     <div className="bg-white p-4 rounded shadow mt-8">
-      <h3 className="text-xl font-semibold mb-3">Proveri kalorije (Edamam)</h3>
+      <h3 className="text-xl font-semibold mb-3">Proveri kalorije </h3>
       <form onSubmit={handleSearch} className="flex gap-2 mb-4">
         <input
           type="text"
