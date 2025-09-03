@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -99,4 +102,32 @@ Route::apiResource('workouts', WorkoutController::class);
     Route::apiResource('nutrition-entries', NutritionEntryController::class);
     Route::apiResource('hydration-entries', HydrationEntryController::class);
 
+});
+
+
+
+Route::middleware('auth:sanctum')->get('/nutrition-hydration-summary/pdf', function (Request $request) {
+    $userId = auth()->id();
+
+    $date = $request->query('date') 
+        ? Carbon::parse($request->query('date'))->toDateString()
+        : Carbon::today()->toDateString();
+
+    $nutrition = \App\Models\NutritionEntry::where('user_id', $userId)
+                    ->whereDate('created_at', $date)
+                    ->select('meal_type', 'calories')
+                    ->get();
+
+    $hydration = \App\Models\HydrationEntry::where('user_id', $userId)
+                    ->whereDate('created_at', $date)
+                    ->select('amount_ml')
+                    ->get();
+
+    $pdf = Pdf::loadView('pdf.daily-summary', [
+        'date' => $date,
+        'nutrition' => $nutrition,
+        'hydration' => $hydration,
+    ]);
+
+    return $pdf->download("daily-summary-{$date}.pdf");
 });

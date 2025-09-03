@@ -51,7 +51,8 @@ function AppWrapper() {
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
-      {showFooter && <Footer onLogout={handleLogout} />}
+      {showFooter && <Footer onLogout={handleLogout} token={localStorage.getItem('token')} />}
+
     </>
   );
 }
