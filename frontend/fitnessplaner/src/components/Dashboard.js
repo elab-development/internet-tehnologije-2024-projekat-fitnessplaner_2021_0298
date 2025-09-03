@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DailyMessage from './DailyMessage';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import DailyCaloriesChart from './DailyCaloriesChart';
 
 export default function Dashboard() {
   const [totalCalories, setTotalCalories] = useState(null);
@@ -18,14 +19,10 @@ export default function Dashboard() {
       try {
         const [caloriesRes, waterRes] = await Promise.all([
           axios.get('http://127.0.0.1:8000/api/nutrition-entries/total-calories', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get('http://127.0.0.1:8000/api/hydration-entries/total-ml', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
 
@@ -47,11 +44,10 @@ export default function Dashboard() {
     }
 
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/nutrition-hydration-summary?date=${selectedDate}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `http://127.0.0.1:8000/api/nutrition-hydration-summary?date=${selectedDate}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setSummary(res.data);
       setError('');
     } catch (err) {
@@ -80,6 +76,7 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      {/* Sekcija sa ukupnim kalorijama i vodom */}
       <div className="summary-info bg-gray-100 p-4 rounded shadow text-center mt-10">
         <h2 className="text-xl font-semibold mb-2">Zanimljivost do sada:</h2>
         <p className="text-lg">
@@ -92,63 +89,66 @@ export default function Dashboard() {
         </p>
       </div>
 
+      {/* Grafikon kalorija po danima */}
+      <div className="chart-container bg-white p-4 rounded shadow mt-8">
+        <DailyCaloriesChart token={localStorage.getItem('token')} />
+      </div>
+
       {/* Dodatak za izbor datuma i summary */}
-            <div className="date-summary">
-  <h2 className="date-summary-title">Pregled za odabrani datum</h2>
+      <div className="date-summary mt-10">
+        <h2 className="date-summary-title text-xl font-semibold mb-2">Pregled za odabrani datum</h2>
 
-  <div className="date-summary-controls">
-    <input
-      type="date"
-      value={selectedDate}
-      onChange={(e) => setSelectedDate(e.target.value)}
-      className="date-input"
-    />
-    <button
-      onClick={handleFetchSummary}
-      className="fetch-button"
-    >
-      Prikaži podatke
-    </button>
-  </div>
+        <div className="date-summary-controls mb-4 flex gap-2">
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="date-input border p-2 rounded"
+          />
+          <button
+            onClick={handleFetchSummary}
+            className="fetch-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Prikaži podatke
+          </button>
+        </div>
 
-  {error && <p className="error-message">{error}</p>}
+        {error && <p className="error-message text-red-500 mb-2">{error}</p>}
 
-  {summary && (
-    <div className="summary-results">
-      <h3 className="summary-date">Datum: {summary.date}</h3>
+        {summary && (
+          <div className="summary-results bg-gray-50 p-4 rounded shadow">
+            <h3 className="summary-date font-semibold mb-2">Datum: {summary.date}</h3>
 
-      <div className="summary-section">
-        <h4>Nutrition:</h4>
-        {summary.nutrition.length > 0 ? (
-          <ul>
-            {summary.nutrition.map((entry, index) => (
-              <li key={index}>
-                {entry.meal_type}: {entry.calories} kcal
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Nema unosa hrane za ovaj datum.</p>
+            <div className="summary-section mb-4">
+              <h4 className="font-medium mb-1">Nutrition:</h4>
+              {summary.nutrition.length > 0 ? (
+                <ul className="list-disc pl-5">
+                  {summary.nutrition.map((entry, index) => (
+                    <li key={index}>
+                      {entry.meal_type}: {entry.calories} kcal
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Nema unosa hrane za ovaj datum.</p>
+              )}
+            </div>
+
+            <div className="summary-section">
+              <h4 className="font-medium mb-1">Hydration:</h4>
+              {summary.hydration.length > 0 ? (
+                <ul className="list-disc pl-5">
+                  {summary.hydration.map((entry, index) => (
+                    <li key={index}>{entry.amount_ml} ml</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Nema unosa vode za ovaj datum.</p>
+              )}
+            </div>
+          </div>
         )}
       </div>
-
-      <div className="summary-section">
-        <h4>Hydration:</h4>
-        {summary.hydration.length > 0 ? (
-          <ul>
-            {summary.hydration.map((entry, index) => (
-              <li key={index}>{entry.amount_ml} ml</li>
-            ))}
-          </ul>
-        ) : (
-          <p>Nema unosa vode za ovaj datum.</p>
-        )}
-      </div>
-    </div>
-  )}
-</div>
-
-
     </div>
   );
 }

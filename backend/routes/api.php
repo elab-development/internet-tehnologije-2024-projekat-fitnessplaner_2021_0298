@@ -104,6 +104,9 @@ Route::apiResource('workouts', WorkoutController::class);
 
 });
 
+Route::get('/nutrition-daily-calories', [NutritionEntryController::class, 'getDailyCalories'])->middleware('auth:sanctum');
+
+
 
 
 Route::middleware('auth:sanctum')->get('/nutrition-hydration-summary/pdf', function (Request $request) {

@@ -96,5 +96,23 @@ class NutritionEntryController extends Controller
     ]);
 }
 
+
+public function getDailyCalories()
+{
+    $userId = auth()->id();
+
+    $data = NutritionEntry::select(
+            DB::raw('DATE(entry_date) as date'),
+            DB::raw('SUM(calories) as total_calories')
+        )
+        ->where('user_id', $userId)
+        ->whereMonth('entry_date', date('m')) // trenutni mesec
+        ->groupBy(DB::raw('DATE(entry_date)'))
+        ->orderBy('date')
+        ->get();
+
+    return response()->json($data);
+}
+
 }
 
