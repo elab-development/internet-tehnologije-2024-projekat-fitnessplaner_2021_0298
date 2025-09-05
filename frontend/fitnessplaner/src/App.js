@@ -22,11 +22,11 @@ function AppWrapper() {
   const role = localStorage.getItem('role');
 
   // Rute gde NE želimo da se prikazuje NavBar
-  const noNavRoutes = ['/', '/register', '/dashboard'];
+  const noNavRoutes = ['/', '/register', '/dashboard', '/forgot-password', '/reset-password'];
   const showNav = !noNavRoutes.includes(location.pathname) && role !== 'coach';
 
   // Rute gde NE želimo da se prikazuje Footer
-  const noFooterRoutes = ['/', '/register'];
+  const noFooterRoutes = ['/', '/register', '/forgot-password', '/reset-password'];
   const showFooter = !noFooterRoutes.includes(location.pathname);
 
   // Logout funkcija - briše token i preusmerava na login

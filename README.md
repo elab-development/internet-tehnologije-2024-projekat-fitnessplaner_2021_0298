@@ -1,61 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Fitness Planner
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200" alt="Laravel Logo">
+<img src="https://reactjs.org/logo-og.png" width="200" alt="React Logo">
 </p>
 
-## About Laravel
+Fitness Planner je web aplikacija za praćenje fizičke aktivnosti, unosa hrane i hidracije. Omogućava korisnicima da kreiraju, pregledaju i ažuriraju svoje treninge, dnevni unos kalorija i količinu unete vode. Takođe, treneri mogu da kreiraju treninge za svoje korisnike i prate njihove aktivnosti.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tehnologije korišćene
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend:** Laravel 10 (PHP)
+- **Frontend:** React.js
+- **Baza podataka:** MySQL / MariaDB
+- **Autentifikacija:** Laravel Sanctum
+- **Vizualizacija podataka:** react-google-charts
+- **PDF generisanje:** barryvdh/laravel-dompdf
+- **API Requests:** Axios
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Funkcionalnosti
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Korisničke
+- Registracija i prijava korisnika
+- Praćenje unosa hrane i hidracije
+- Kreiranje, pregled i izmena treninga
+- Pregled dnevnog i mesečnog unosa kalorija
+- Grafički prikaz unosa kalorija za tekući mesec (LineChart)
+- PDF izveštaj za dnevni unos hrane i hidracije
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Trenerske
+- Kreiranje treninga za svoje korisnike
+- Pregled treninga korisnika po danima
+- Autorizacija i prava pristupa za trenere i korisnike
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Instalacija
 
-### Premium Partners
+### Backend (Laravel)
+1. Kloniraj repozitorijum:
+```bash
+git clone <repo-url>
+Instaliraj PHP zavisnosti:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+bash
+Copy code
+composer install
+Kreiraj .env fajl:
 
-## Contributing
+bash
+Copy code
+cp .env.example .env
+Konfiguriši bazu podataka u .env fajlu
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Pokreni migracije:
 
-## Code of Conduct
+bash
+Copy code
+php artisan migrate
+Pokreni server:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+bash
+Copy code
+php artisan serve
+Frontend (React)
+Idi u frontend direktorijum:
 
-## Security Vulnerabilities
+bash
+Copy code
+cd frontend/fitnessplaner
+Instaliraj npm pakete:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+bash
+Copy code
+npm install
+Pokreni razvojni server:
 
-## License
+bash
+Copy code
+npm start
+REST API
+Aplikacija koristi RESTful API sa sledećim funkcionalnostima:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Autentifikacija
+
+POST /api/register – registracija korisnika
+
+POST /api/login – prijava
+
+POST /api/logout – odjava
+
+Treninzi
+
+GET /api/workouts – svi treninzi trenutnog korisnika
+
+POST /api/workouts – kreiranje treninga
+
+PUT /api/workouts/{id} – izmena treninga
+
+DELETE /api/workouts/{id} – brisanje treninga
+
+POST /api/coach/add-workout – trener dodaje trening za korisnika
+
+Nutricija
+
+GET /api/nutrition-entries – svi unosi hrane
+
+GET /api/nutrition-entries/total-calories – ukupne kalorije
+
+GET /api/nutrition-daily-calories – dnevni unos kalorija za graf
+
+GET /api/nutrition-hydration-summary – pregled unosa za određeni datum
+
+GET /api/nutrition-hydration-summary/pdf – PDF izveštaj
+
+Hidracija
+
+GET /api/hydration-entries – svi unosi vode
+
+GET /api/hydration-entries/total-ml – ukupna količina vode
+
+Trener
+
+GET /api/coach/users – lista korisnika koje trener prati
+
+Struktura projekta
+bash
+Copy code
+fitnessplaner/
+├── backend/ (Laravel API)
+│   ├── app/
+│   ├── routes/api.php
+│   ├── database/migrations/
+│   └── ...
+└── frontend/ (React)
+    ├── src/
+    │   ├── components/
+    │   │   ├── Dashboard.jsx
+    │   │   ├── DailyCaloriesChart.jsx
+    │   │   └── ...
+    │   └── App.jsx
+    └── package.json
+Dodatne napomene
+Frontend i backend komuniciraju preko REST API i tokena iz Laravel Sanctum.
+
+Grafički prikazi koriste react-google-charts.
+
+PDF izveštaji se generišu korišćenjem DomPDF.
+
+Trener i korisnik imaju različite role, koje definišu prava pristupa.

@@ -41,9 +41,9 @@ const Register = () => {
 
         // preusmeri korisnika na odgovarajući dashboard
         if (role === 'user') {
-          navigate('/dashboard');
+          navigate('/');
         } else if (role === 'coach') {
-          navigate('/coach-dashboard');
+          navigate('/');
         }
       } else {
         setError(data.message || 'Registracija nije uspela');

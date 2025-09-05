@@ -216,7 +216,7 @@ const handleDeleteHydration = async (id) => {
       <div className="ml-auto">
         <Button
           text="Obriši"
-          onClick={() => handleDeleteNutrition(log.id)}
+          onClick={() => handleDeleteHydration(log.id)}
           variant="danger"
         />
       </div>
