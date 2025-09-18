@@ -14,6 +14,7 @@ import FoodLookup from './components/FoodLookup';
 import CoachDashboard from './components/CoachDashboard';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import TestCalendar from './components/TestCalendar';
 
 
 function AppWrapper() {
@@ -49,6 +50,7 @@ function AppWrapper() {
         <Route path="/coach-dashboard" element={<CoachDashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/test-calendar" element={<TestCalendar />} />
       </Routes>
 
       {showFooter && <Footer onLogout={handleLogout} token={localStorage.getItem('token')} />}

@@ -169,6 +169,20 @@ class WorkoutController extends Controller
     return response()->json($workouts);
 }
 
+    public function getAllForCalendar()
+{
+    $workouts = Workout::where('user_id', Auth::id())->get(); // sve, bez paginacije
+    return WorkoutResource::collection($workouts);
+}
+
+// Vraća sve treninge korisnika bez paginacije (za kalendar)
+public function all()
+{
+    $workouts = Workout::where('user_id', Auth::id())->get();
+    return \App\Http\Resources\WorkoutResource::collection($workouts);
+}
+
+
 
     public function getByDay($day)
     {

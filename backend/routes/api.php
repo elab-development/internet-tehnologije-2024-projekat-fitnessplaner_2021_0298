@@ -50,7 +50,24 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-   
+   // Standardna paginacija
+Route::get('/workouts', [WorkoutController::class, 'index']);
+
+// Sve za kalendar (bez paginacije)
+Route::get('/workouts/all', [WorkoutController::class, 'all']);
+
+// Lista po danu
+Route::get('/workouts/by-day/{day}', [WorkoutController::class, 'getByDay']);
+
+// Kreiranje novog treninga
+Route::post('/workouts', [WorkoutController::class, 'store']);
+
+// Brisanje treninga
+Route::delete('/workouts/{id}', [WorkoutController::class, 'destroy']);
+
+// Ažuriranje treninga
+Route::put('/workouts/{id}', [WorkoutController::class, 'update']);
+
     
 
     Route::get('/nutrition-entries/total-calories', function () {
@@ -110,6 +127,9 @@ Route::get('/nutrition-daily-calories', [NutritionEntryController::class, 'getDa
 // ugnjezdene rute
 Route::get('/users/{user}/nutrition-entries', [NutritionEntryController::class, 'getByUser']);
 Route::get('/users/{user}/workouts', [WorkoutController::class, 'getByUser']);
+
+
+
 
 
 
