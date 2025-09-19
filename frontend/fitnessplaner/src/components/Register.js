@@ -44,6 +44,8 @@ const Register = () => {
           navigate('/');
         } else if (role === 'coach') {
           navigate('/');
+        } else if (role === 'admin') {
+          navigate('/');
         }
       } else {
         setError(data.message || 'Registracija nije uspela');
@@ -89,6 +91,7 @@ const Register = () => {
         <select value={role} onChange={(e) => setRole(e.target.value)} className="role-select">
   <option value="user">Korisnik</option>
   <option value="coach">Trener</option>
+  <option value="admin">Administrator</option>
 </select>
         {/* <button type="submit">Registruj se</button> */}
         <Button type="submit" text="Registruj se" variant="primary" />

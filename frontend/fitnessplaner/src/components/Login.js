@@ -30,11 +30,13 @@ const Login = () => {
     localStorage.setItem('role', data.role); // čuvamo ulogu
 
     // Preusmeravanje u zavisnosti od uloge
-    if (data.role === 'coach') {
-        navigate('/coach-dashboard');
-    } else {
-        navigate('/dashboard'); // običan korisnik
-    }
+    if (data.role === 'admin') {
+    navigate('/admin-dashboard');   // admin ide na svoj dashboard
+} else if (data.role === 'coach') {
+    navigate('/coach-dashboard');   // trener ide na svoj dashboard
+} else {
+    navigate('/dashboard');         // običan korisnik ide na svoj dashboard
+} 
 } else {
     setError(data.message || 'Neuspešan login');
 }

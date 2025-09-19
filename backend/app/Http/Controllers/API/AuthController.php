@@ -20,7 +20,7 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
-            'role' => 'required|in:user,coach',
+            'role' => 'required|in:user,coach,admin',
         ]);
 
         $user = User::create([

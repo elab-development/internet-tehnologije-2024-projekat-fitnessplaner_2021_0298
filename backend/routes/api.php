@@ -18,6 +18,8 @@ use Illuminate\Auth\Events\PasswordReset;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Http\Controllers\API\AdminController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -80,6 +82,7 @@ Route::get('/hydration-entries/total-ml', function () {
     return response()->json(['total_water_ml' => $total]);
 });
 
+// filtriranje po danima
 Route::get('/workouts/by-day/{day}', [WorkoutController::class, 'getByDay']);
 
 //Route::get('/nutrition-hydration-summary', function () {
@@ -91,25 +94,56 @@ Route::get('/workouts/by-day/{day}', [WorkoutController::class, 'getByDay']);
   //  ]);
 //});
 
-Route::get('/nutrition-hydration-summary', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/nutrition-hydration-summary', function (Request $request) {
     $userId = auth()->id();
 
     $date = $request->query('date') 
         ? Carbon::parse($request->query('date'))->toDateString()
         : Carbon::today()->toDateString();
 
+    // Nutrition unosi
+    $nutrition = \DB::table('nutrition_entries')
+        ->where('user_id', $userId)
+        ->whereDate('created_at', $date)
+        ->select('meal_type', 'calories')
+        ->get();
+
+    // Hydration unosi
+    $hydration = \DB::table('hydration_entries')
+        ->where('user_id', $userId)
+        ->whereDate('created_at', $date)
+        ->select('amount_ml')
+        ->get();
+
+    // JOIN primer: povezivanje nutrition i hydration po user_id
+    $joined = \DB::table('nutrition_entries')
+        ->leftJoin('hydration_entries', function($join) use ($userId, $date) {
+            $join->on('nutrition_entries.user_id', '=', 'hydration_entries.user_id')
+                 ->whereDate('hydration_entries.created_at', $date);
+        })
+        ->where('nutrition_entries.user_id', $userId)
+        ->whereDate('nutrition_entries.created_at', $date)
+        ->select(
+            'nutrition_entries.meal_type',
+            'nutrition_entries.calories',
+            'hydration_entries.amount_ml'
+        )
+        ->get();
+
     return response()->json([
         'date' => $date,
-        'nutrition' => \App\Models\NutritionEntry::where('user_id', $userId)
-                        ->whereDate('created_at', $date)
-                        ->select('meal_type', 'calories')
-                        ->get(),
-        'hydration' => \App\Models\HydrationEntry::where('user_id', $userId)
-                        ->whereDate('created_at', $date)
-                        ->select('amount_ml')
-                        ->get(),
+        'nutrition' => $nutrition,
+        'hydration' => $hydration,
+        'joined_entries' => $joined,
     ]);
 });
+
+
+
+
+
+
+
 
 Route::get('/nutrition-entries/total-by-date', [NutritionEntryController::class, 'getCaloriesByDate']);
 
@@ -129,7 +163,10 @@ Route::get('/users/{user}/nutrition-entries', [NutritionEntryController::class, 
 Route::get('/users/{user}/workouts', [WorkoutController::class, 'getByUser']);
 
 
-
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/admin/users', [AdminController::class, 'index']);
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy']);
+});
 
 
 

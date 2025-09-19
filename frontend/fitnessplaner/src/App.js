@@ -14,6 +14,7 @@ import FoodLookup from './components/FoodLookup';
 import CoachDashboard from './components/CoachDashboard';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import AdminDashboard from './components/AdminDashboard';
 
 
 function AppWrapper() {
@@ -22,7 +23,7 @@ function AppWrapper() {
   const role = localStorage.getItem('role');
 
   // Rute gde NE želimo da se prikazuje NavBar
-  const noNavRoutes = ['/', '/register', '/dashboard', '/forgot-password', '/reset-password'];
+  const noNavRoutes = ['/', '/register', '/dashboard', '/forgot-password', '/reset-password', '/admin-dashboard'];
   const showNav = !noNavRoutes.includes(location.pathname) && role !== 'coach';
 
   // Rute gde NE želimo da se prikazuje Footer
@@ -49,6 +50,7 @@ function AppWrapper() {
         <Route path="/coach-dashboard" element={<CoachDashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
 
       {showFooter && <Footer onLogout={handleLogout} token={localStorage.getItem('token')} />}
