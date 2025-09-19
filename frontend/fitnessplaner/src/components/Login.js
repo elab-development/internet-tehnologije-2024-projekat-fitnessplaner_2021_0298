@@ -1,0 +1,96 @@
+import React, { useState } from 'react';
+import Button from './Reusable/Button';
+import { useNavigate, Link } from 'react-router-dom';
+
+const Login = () => {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('role', data.role); // čuvamo ulogu
+
+    // Preusmeravanje u zavisnosti od uloge
+    if (data.role === 'admin') {
+    navigate('/admin-dashboard');   // admin ide na svoj dashboard
+} else if (data.role === 'coach') {
+    navigate('/coach-dashboard');   // trener ide na svoj dashboard
+} else {
+    navigate('/dashboard');         // običan korisnik ide na svoj dashboard
+} 
+} else {
+    setError(data.message || 'Neuspešan login');
+}
+    } catch (err) {
+      setError('Greška na serveru');
+    }
+
+    finally {
+      setLoading(false);
+    }
+    
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        /><br />
+        <input
+          type="password"
+          placeholder="Lozinka"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        /><br />
+        {/* <button type="submit">Login</button> */}
+
+        <Button
+        type="submit"
+        text={loading ? 'Prijavljivanje...' : 'Prijavi se'}
+        variant="primary"
+        disabled={loading}
+      />
+
+      </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <p style={{ marginTop: '1rem' }}>
+        Don’t have an account? <Link to="/register">Sign up</Link>
+      </p>
+      <p style={{ marginTop: '0.5rem' }}>
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </p>
+    </div>
+  );
+};
+
+export default Login;
+
+
+
